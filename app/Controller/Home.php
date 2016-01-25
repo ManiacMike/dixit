@@ -4,6 +4,8 @@ class Controller_Home extends Controller_Base {
 
 	//defaule website entrance
 	public function indexAction(){
+		$test = new UserModel(true);
+		$test->getRoomList();
 
 		echo '<p>Welcome to Kiss Framework</p>';
 
@@ -14,6 +16,7 @@ class Controller_Home extends Controller_Base {
 		$this->view->square4 = $this->view->getSquare(4);
 
 		$this->render('home/welcome');
+
 		echo 123;
 	}
 
@@ -36,7 +39,7 @@ class Controller_Home extends Controller_Base {
         parent::after();
 
 		echo '<p>Current Controller: '. Kiss_Router::currController() . '</p>';
-		echo '<p>Current Action: '. Kiss_Router::currAction() . '</p>';        
+		echo '<p>Current Action: '. Kiss_Router::currAction() . '</p>';
     }
 
 }

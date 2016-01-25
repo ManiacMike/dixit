@@ -17,7 +17,7 @@ class Utils{
 		}
 		return $ip;
 	}
-	
+
 	/**
 	* log function
 	* @param $message string
@@ -31,7 +31,7 @@ class Utils{
 			return;
 		}
 
-		$logPath = APP_PATH.'/../logs';
+		$logPath = APP_PATH.'/logs';
 		try{
 			$log = new Kiss_Log($logPath);
 			$log->write($message, $prefix);
@@ -40,5 +40,5 @@ class Utils{
 		}
 		$lastMsg = $message;
 	}
-	
+
 }
