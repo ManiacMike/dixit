@@ -25,7 +25,7 @@ class BaseModel{
   }
 
   public function insert($table,$data){
-
+    $sql = "INSERT INTO `{table}`";
   }
 
   public function update($table,$data,$where,$sqlParams = array()){
