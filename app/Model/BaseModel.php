@@ -5,7 +5,7 @@ class BaseModel{
 
   protected $config;
 
-  public function __construct($withDb = false){
+  public function __construct($withDb = true){
     $config = Kiss_Registry::get("config");
     $this->config = $config;
     if($withDb)
@@ -15,31 +15,70 @@ class BaseModel{
   public function fetch($table,$where,$fetchParams = "*",$sqlParams = array()){
     $sql = "SELECT {$fetchParams} FROM `{$table}` WHERE {$where}";
     $stmt = $this->_prepare($sql,$sqlParams);
+    if($stmt->execute() === false){
+			new LogDbError(__METHOD__, $stmt);
+			return false;
+		}
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function fetchSingle($table,$where,$fetchParams = "*",$sqlParams = array()){
     $sql = "SELECT {$fetchParams} FROM `{$table}` WHERE {$where}";
     $stmt = $this->_prepare($sql,$sqlParams);
+    if($stmt->execute() === false){
+      new LogDbError(__METHOD__, $stmt);
+      return false;
+    }
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function insert($table,$data){
-    $sql = "INSERT INTO `{table}`";
+  public function insert($table,$sqlParams){
+    if(empty($sqlParams))
+      return false;
+    $sql = "INSERT INTO `{$table}`";
+    $keys = array_keys($sqlParams);
+    $sql .= "(".implode(",", $keys).") VALUES";
+    $values = array_values($sqlParams);
+    $sql .= " (:". implode(",:",$keys) .")";
+    $stmt = $this->_prepare($sql,$sqlParams);
+    if($stmt->execute() === false){
+      new LogDbError(__METHOD__, $stmt);
+      return false;
+    }
+    return true;
   }
 
-  public function update($table,$data,$where,$sqlParams = array()){
-
+  public function update($table,$sqlParams,$where){
+    if(empty($sqlParams))
+      return false;
+    $sql = "UPDATE `$table` set ";
+    foreach ($sqlParams as $key => $value) {
+        $sql .= "`{$key}` = :$key";
+    }
+    $sql .= " WHERE {$where}";
+    $stmt = $this->_prepare($sql,$sqlParams);
+    if($stmt->execute() === false){
+      new LogDbError(__METHOD__, $stmt);
+      return false;
+    }
+    return true;
   }
 
   public function delete($table,$where){
-
+    //todo injection danger on where
+    $sql = "DElETE FROM `$table` WHERE {$where}";
+    $stmt = $this->_prepare($sql,array());
+    if($stmt->execute() === false){
+      new LogDbError(__METHOD__, $stmt);
+      return false;
+    }
+    return true;
   }
 
   protected function _prepare($sql,$sqlParams){
     $stmt = $this->db->prepare($sql);
-    foreach ($sqlParams as $key => $value) {
-      $stmt = $stmt->bindParam($key, $value);
+    foreach ($sqlParams as $key => &$value) {
+      $stmt->bindParam(":".$key, $value);
     }
     return $stmt;
   }

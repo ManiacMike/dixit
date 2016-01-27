@@ -4,20 +4,19 @@ class Controller_Home extends Controller_Base {
 
 	//defaule website entrance
 	public function indexAction(){
-		$test = new UserModel(true);
-		$test->getRoomList();
+		session_start();
+		$test = new UserModel();
+		$test->deleteRoom();
 
-		echo '<p>Welcome to Kiss Framework</p>';
+		// echo '<p>Welcome to Kiss Framework</p>';
 
 		//set page title
-		$this->view->title = 'Example for Kiss Framework';
-
-		//get square(4)
-		$this->view->square4 = $this->view->getSquare(4);
-
-		$this->render('home/welcome');
-
-		echo 123;
+		// $this->view->title = 'Example for Kiss Framework';
+		//
+		// //get square(4)
+		// $this->view->square4 = $this->view->getSquare(4);
+		//
+		// $this->render('home/welcome');
 	}
 
 	public function hiAction(){
