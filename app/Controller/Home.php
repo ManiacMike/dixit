@@ -2,21 +2,18 @@
 
 class Controller_Home extends Controller_Base {
 
-	//defaule website entrance
 	public function indexAction(){
 		session_start();
-		$test = new UserModel();
-		$test->deleteRoom();
+		if(empty($_SESSION['uid'])){
+			$_SESSION['uid'] = uniqid();
+		}
+		$roomModel = new RoomModel();
+		$roomList = $roomModel->getRoomList();
+		$this->view->roomList = $roomList;
 
-		// echo '<p>Welcome to Kiss Framework</p>';
+		$this->view->title = '只言片语dixit';
 
-		//set page title
-		// $this->view->title = 'Example for Kiss Framework';
-		//
-		// //get square(4)
-		// $this->view->square4 = $this->view->getSquare(4);
-		//
-		// $this->render('home/welcome');
+		$this->render('home/index');
 	}
 
 	public function hiAction(){
@@ -27,18 +24,5 @@ class Controller_Home extends Controller_Base {
 
 		echo 'Hello '.ucfirst($name);
 	}
-
-	/**called before each action**/
-    public function before(){
-        parent::before();
-    }
-
-	/**called after each action**/
-    public function after(){
-        parent::after();
-
-		echo '<p>Current Controller: '. Kiss_Router::currController() . '</p>';
-		echo '<p>Current Action: '. Kiss_Router::currAction() . '</p>';
-    }
 
 }

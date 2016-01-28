@@ -5,14 +5,12 @@ class BaseModel{
 
   protected $config;
 
-  public function __construct($withDb = true){
+  public function __construct(){
     $config = Kiss_Registry::get("config");
     $this->config = $config;
-    if($withDb)
-      $this->db = new LazyPdoRw($config->db_dixit->dsn,$config->db_dixit->username,$config->db_dixit->password);
   }
 
-  public function fetch($table,$where,$fetchParams = "*",$sqlParams = array()){
+  public function fetchAll($table,$where,$fetchParams = "*",$sqlParams = array()){
     $sql = "SELECT {$fetchParams} FROM `{$table}` WHERE {$where}";
     $stmt = $this->_prepare($sql,$sqlParams);
     if($stmt->execute() === false){
@@ -22,7 +20,7 @@ class BaseModel{
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function fetchSingle($table,$where,$fetchParams = "*",$sqlParams = array()){
+  public function fetch($table,$where,$fetchParams = "*",$sqlParams = array()){
     $sql = "SELECT {$fetchParams} FROM `{$table}` WHERE {$where}";
     $stmt = $this->_prepare($sql,$sqlParams);
     if($stmt->execute() === false){
@@ -76,6 +74,8 @@ class BaseModel{
   }
 
   protected function _prepare($sql,$sqlParams){
+    $config = $this->config;
+    $this->db = new LazyPdoRw($config->db_dixit->dsn,$config->db_dixit->username,$config->db_dixit->password);
     $stmt = $this->db->prepare($sql);
     foreach ($sqlParams as $key => &$value) {
       $stmt->bindParam(":".$key, $value);
