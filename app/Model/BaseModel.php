@@ -43,7 +43,7 @@ class BaseModel{
       new LogDbError(__METHOD__, $stmt);
       return false;
     }
-    return true;
+    return $this->db->lastInsertId();
   }
 
   public function update($table,$sqlParams,$where){

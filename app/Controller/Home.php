@@ -3,7 +3,6 @@
 class Controller_Home extends Controller_Base {
 
 	public function indexAction(){
-		session_start();
 		if(empty($_SESSION['uid'])){
 			$_SESSION['uid'] = uniqid();
 		}
@@ -12,7 +11,7 @@ class Controller_Home extends Controller_Base {
 		$this->view->roomList = $roomList;
 
 		$this->view->title = '只言片语dixit';
-
+		$this->view->pageName = "index";
 		$this->render('home/index');
 	}
 

@@ -6,13 +6,14 @@ class RoomModel extends BaseModel{
     return $rooms;
   }
 
-  public function addRoom(){
+  public function addRoom($name,$password,$creator){
     $res = $this->insert("game",array(
-      "name"=>"test",
-      "creator"=>123,
+      "name"=>$name,
+      "password"=>$password,
+      "creator"=>$creator,
       "create_time"=>time()
     ));
-    var_dump($res);
+    return $res;
   }
 
   public function updateRoom(){
