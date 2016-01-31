@@ -6,13 +6,43 @@ class RoomModel extends BaseModel{
     return $rooms;
   }
 
+  public function getRoomById($id){
+    $rooms = $this->fetch("game","id = :id",array("id"=>$id));
+    return $rooms;
+  }
+
   public function addRoom($name,$password,$creator){
+    $userlist = array(
+      $creator=>array(),
+    );
     $res = $this->insert("game",array(
       "name"=>$name,
       "password"=>$password,
       "creator"=>$creator,
-      "create_time"=>time()
+      "create_time"=>time(),
+      "user_count"=>1,
+      "user_list"=>json_encode($userlist)
     ));
+    return $res;
+  }
+
+  public function addUser($rid,$userlist,$uid){
+    $userlist[$uid] = array();
+    $res = $this->update("game",array(
+      "id"=>$rid,
+      "user_list"=>json_encode($userlist),
+      "user_count"=>BaseModel::INCREMENT_PLACEHOLD,
+    ),"id = :id");
+    return $res;
+  }
+
+  public function removeUser($rid,$userlist,$uid){
+    unset($userlist[$uid]);
+    $res = $this->update("game",array(
+      "id"=>$rid,
+      "user_list"=>json_encode($userlist),
+      "user_count"=>BaseModel::DECREMENT_PLACEHOLD,
+    ),"id = :id");
     return $res;
   }
 

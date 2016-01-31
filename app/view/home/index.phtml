@@ -5,9 +5,15 @@
 <div class="container">
 <h1>只言片语</h1>
 <div class="row">
-<div class="col-md-2 col-md-offset-2">
-  <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">创建</a></div>
+  <div class="col-md-2">
+    <p><?=$this->uid?></p>
+  </div>
+  <div class="col-md-2">
+    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">创建</a>
+  </div>
 </div>
+
+
 <?php $roomNum = count($this->roomList);
 $rowNum = ceil($roomNum/4);
 $offset = 0;
@@ -19,9 +25,9 @@ for ($i = 0;$i < $rowNum;$i++) {
   <?php foreach ($rooms as $key => $room) {?>
     <div class="col-md-3">
       <div class="card card-block">
-       <h3 class="card-title"><?=$room['name']?> (<?=$room['user_count']?>)</h3>
+       <h3 class="card-title"><span class="room_name"><?=$room['name']?></span> (<?=$room['user_count']?>)</h3>
        <p class="card-text"><?php if(!$room['password']):?>不<?php endif;?>需要密码</p>
-       <a ref="javascript:void(0)" class="btn btn-primary">加入</a>
+       <a ref="javascript:void(0)" class="btn btn-primary" data-id="<?=$room['id']?>" data-pwd="<?=($room['password']?1:0)?>">加入</a>
      </div>
     </div>
     <?php }?>
@@ -29,12 +35,12 @@ for ($i = 0;$i < $rowNum;$i++) {
 <?php }?>
 
 
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">创建房间</h4>
+        <h4 class="modal-title">创建房间</h4>
       </div>
       <div class="modal-body">
         <form>
@@ -54,5 +60,28 @@ for ($i = 0;$i < $rowNum;$i++) {
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="roomPwdModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">加入房间 <span id="room_join_name"></span></h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="message-text" class="control-label">密码:</label>
+            <input type="password" class="form-control" id="room_join_password">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="join_room_btn" class="btn btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <?php include 'footer.phtml';?>

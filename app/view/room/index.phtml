@@ -1,0 +1,32 @@
+<?php include 'header.phtml';?>
+<style>
+.row{margin-bottom: 1rem;}
+</style>
+<div class="container">
+  <h1><?=$this->room['name']?></h1>
+
+  <div class="row">
+    <div class="col-md-2">
+      <p><?=$this->uid?></p>
+    </div>
+    <div class="col-md-2">
+    <?php if($this->isJoined):?>
+      <a type="button" id="quit-btn" data-id="<?=$this->room['id']?>" class="btn btn-danger">退出</a>
+    <?php else:?>
+      <a type="button" id="join-btn" data-id="<?=$this->room['id']?>" class="btn btn-info">加入</a>
+    <?php endif;?>
+    </div>
+  </div>
+
+  <p> 用户列表： </p>
+  <div id="user_list">
+    <div class="row">
+      <?php foreach ($this->room['user_list'] as $uid => $info):?>
+      <div class="col-md-2">
+        <?=$uid?>
+      </div>
+      <?php endforeach;?>
+    </div>
+  </div>
+</div>
+<?php include 'footer.phtml';?>

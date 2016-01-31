@@ -2,35 +2,30 @@
 
 class Controller_Base extends Kiss_Controller{
 
-	  protected $isAjax = false;
+		protected $uid;
 
     public function before(){
         parent::before();
 				session_start();
-				if($this->isAjax == true){
-					if(!isset($_SERVER["HTTP_X_REQUESTED_WITH"]) || strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])!="xmlhttprequest"){
-						$this->echoJson(false,"invaid");
-					};
+				if(empty($_SESSION['uid'])){
+					$_SESSION['uid'] = uniqid();
 				}
+				$this->uid = $_SESSION['uid'];
+				$this->view->uid = $_SESSION['uid'];
+				$this->view->title = '只言片语dixit';
     }
 
     public function after(){
         parent::after();
     }
 
-		protected function echoJson($result,$data){
-			if($result == true){
-				$print = array(
-					"status"=> "success",
-					"data"=>$data
-				);
-			}else{
-				$print = array(
-					"status"=> "fail",
-					"message"=>$data
-				);
-			}
-			echo json_encode($print);
+		protected function errorPage(){
+			echo "error";
+			die;
+		}
+
+		protected function error404(){
+			echo "404";
 			die;
 		}
 }

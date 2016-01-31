@@ -31,7 +31,7 @@ Kiss_Registry::set('config', $config);
 $router = new Kiss_Router();
 
 //map "/hello/*" to Controller/Home.php::hiAction()
-$router->addRoute('/hello/(.*)', 'home/hi', array(1 => 'username'));
+$router->addRoute('/room/(.*)', 'room/index', array(1 => 'room_id'));
 
 //run
 $router->dispatch();
