@@ -16,6 +16,8 @@ class Controller_Room extends Controller_Base {
     $roomInfo['user_list'] = $userlist;
     $this->view->room = $roomInfo;
     $this->view->pageName = "room";
+
+    $channelServer = new GoChannel();
     $this->render('room/index');
   }
 
