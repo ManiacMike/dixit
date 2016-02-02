@@ -18,7 +18,21 @@ class Controller_Room extends Controller_Base {
     $this->view->pageName = "room";
 
     $channelServer = new GoChannel();
+    $res = $channelServer->createChannel($uid);
+    $this->getCsStatus($res);
     $this->render('room/index');
   }
 
+  //递归
+  protected function getCsStatus($res){
+    $this->view->csStatus = false;
+    if($res != false){
+      if($res['code'] == '400'){
+        Utils::log("channel_server_400",$res['message']);
+      }else{
+        $this->view->csStatus = true;
+        $this->view->token = $res['result']['token'];
+      }
+    }
+  }
 }

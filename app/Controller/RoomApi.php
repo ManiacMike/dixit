@@ -1,10 +1,11 @@
 <?php
 
-class Controller_RoomApi extends Controller_BaseAjax {
+class Controller_RoomApi extends Controller_BaseApi {
 
 	protected $uid;
 
 	public function before(){
+			$this->isAjax = true;
 			parent::before();
 			if(empty($_SESSION['uid']))
 				$this->echoJson(false,"invalid uid");
@@ -29,7 +30,7 @@ class Controller_RoomApi extends Controller_BaseAjax {
   }
 
 	public function joinAction(){
-		//TODO one user only can join one 
+		//TODO one user only can join one
 		$rid = trim($_POST['rid']);
 		$roomModel = new RoomModel();
 		$room = $roomModel->getRoomById($rid);

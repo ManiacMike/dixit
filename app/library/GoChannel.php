@@ -20,6 +20,7 @@ class GoChannel{
   }
 
   public function getChannel($uid){
+    //TODO set to Memcache
     $this->postParams["uid"] = $uid;
     $res = $this->curlPost($this->url."/get-channel",$this->postParams);
     return $res;
@@ -55,6 +56,7 @@ class GoChannel{
     curl_setopt ( $ch, CURLOPT_URL, $url );
     curl_setopt ( $ch, CURLOPT_POST, 1 );
     curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+    curl_setopt ( $ch, CURLOPT_TIMEOUT, 5);
     curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
     curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
     $return = curl_exec ( $ch );
