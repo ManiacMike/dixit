@@ -29,4 +29,24 @@
     </div>
   </div>
 </div>
+
+<script>
+<?php if($this->csStatus):?>
+var token = "<?=$this->token?>",uid = "<?=$this->uid?>",app_id = "<?=$this->appId?>"
+var ws = new WebSocket('ws://<?=$this->wsHost?>/?uid='+uid+'&token='+token+'&app_id='+app_id);
+var status = false;
+ws.onopen = function() {
+  status = true
+  console.log(status);
+};
+ws.onclose = function() {
+  status = true
+};
+ws.onerror = function(e) {
+  status = true
+}
+ws.onmessage = function(event) {
+};
+<?php endif;?>
+</script>
 <?php include 'footer.phtml';?>

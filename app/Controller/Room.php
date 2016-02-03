@@ -18,12 +18,11 @@ class Controller_Room extends Controller_Base {
     $this->view->pageName = "room";
 
     $channelServer = new GoChannel();
-    $res = $channelServer->createChannel($uid);
+    $res = $channelServer->createChannel($this->uid);
     $this->getCsStatus($res);
     $this->render('room/index');
   }
 
-  //递归
   protected function getCsStatus($res){
     $this->view->csStatus = false;
     if($res != false){
@@ -31,6 +30,9 @@ class Controller_Room extends Controller_Base {
         Utils::log("channel_server_400",$res['message']);
       }else{
         $this->view->csStatus = true;
+        $config = Kiss_Registry::get("config");
+        $this->view->wsHost = $config->gochannel_url;
+        $this->view->appId = $config->gochannel_app_id;
         $this->view->token = $res['result']['token'];
       }
     }
