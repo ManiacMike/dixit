@@ -57,4 +57,9 @@ class RoomModel extends BaseModel{
     $res = $this->delete("game","id=2");
     var_dump($res);
   }
+
+  //TODO 改成memcahe
+  public function getRoomIdByUid($uid){
+    
+  }
 }

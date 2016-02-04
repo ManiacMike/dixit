@@ -60,6 +60,7 @@ class GoChannel{
     curl_setopt ( $ch, CURLOPT_TIMEOUT, 5);
     curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
     curl_setopt ( $ch, CURLOPT_POSTFIELDS, $postString );
+    Utils::log($postString."|||".$url,"curlPost");
     $return = curl_exec ( $ch );
     curl_close ( $ch );
     $result = json_decode($return,true);

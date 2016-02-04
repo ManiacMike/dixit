@@ -37,7 +37,7 @@ var ws = new WebSocket('ws://<?=$this->wsHost?>/?uid='+uid+'&token='+token+'&app
 var status = false;
 ws.onopen = function() {
   status = true
-  console.log(status);
+  ws.send('{"event":"connect","room_id":"<?=$this->room['id']?>"}');
 };
 ws.onclose = function() {
   status = true

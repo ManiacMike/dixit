@@ -13,7 +13,7 @@ class Controller_RoomApi extends Controller_BaseApi {
 	}
 
 	public function listAction(){
-
+		
   }
 
   public function createAction(){

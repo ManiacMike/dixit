@@ -10,7 +10,7 @@ class Controller_BaseApi extends Kiss_Controller{
           $this->checkAjax();
     }
 
-    protected checkAjax(){
+    protected function checkAjax(){
       if(!isset($_SERVER["HTTP_X_REQUESTED_WITH"]) || strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])!="xmlhttprequest"){
         $this->echoJson(false,"invaid");
       };
