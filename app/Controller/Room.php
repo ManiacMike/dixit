@@ -16,25 +16,7 @@ class Controller_Room extends Controller_Base {
     $roomInfo['user_list'] = $userlist;
     $this->view->room = $roomInfo;
     $this->view->pageName = "room";
-
-    $channelServer = new GoChannel();
-    $res = $channelServer->createChannel($this->uid);
-    $this->getCsStatus($res);
+    $this->view->wsHost = $config->gochannel_url;
     $this->render('room/index');
-  }
-
-  protected function getCsStatus($res){
-    $this->view->csStatus = false;
-    if($res != false){
-      if($res['code'] == '400'){
-        Utils::log("channel_server_400",$res['message']);
-      }else{
-        $this->view->csStatus = true;
-        $config = Kiss_Registry::get("config");
-        $this->view->wsHost = $config->gochannel_url;
-        $this->view->appId = $config->gochannel_app_id;
-        $this->view->token = $res['result']['token'];
-      }
-    }
   }
 }
