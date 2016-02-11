@@ -12,38 +12,39 @@ class RoomModel extends BaseModel{
   }
 
   public function addRoom($name,$password,$creator){
-    $userlist = array(
-      $creator=>array(),
-    );
+    $userlist = array($creator);
     $res = $this->insert("game",array(
       "name"=>$name,
       "password"=>$password,
       "creator"=>$creator,
       "create_time"=>time(),
-      "user_count"=>1,
       "user_list"=>json_encode($userlist)
     ));
     return $res;
   }
 
   public function addUser($rid,$userlist,$uid){
-    $userlist[$uid] = array();
+    $userlist[] = $uid;
     $res = $this->update("game",array(
       "id"=>$rid,
       "user_list"=>json_encode($userlist),
-      "user_count"=>BaseModel::INCREMENT_PLACEHOLD,
     ),"id = :id");
     return $res;
   }
 
   public function removeUser($rid,$userlist,$uid){
-    unset($userlist[$uid]);
-    $res = $this->update("game",array(
-      "id"=>$rid,
-      "user_list"=>json_encode($userlist),
-      "user_count"=>BaseModel::DECREMENT_PLACEHOLD,
-    ),"id = :id");
-    return $res;
+    if(in_array($uid, $userlist)){
+      unset($userlist[array_search($uid, $userlist)]);
+      $userlist = array_values($userlist);
+      $res = $this->update("game",array(
+        "id"=>$rid,
+        "user_list"=>json_encode($userlist),
+        // "user_count"=>BaseModel::DECREMENT_PLACEHOLD,
+      ),"id = :id");
+      return $res;
+    }else{
+      return true;
+    }
   }
 
   public function updateRoom(){
@@ -60,6 +61,6 @@ class RoomModel extends BaseModel{
 
   //TODO 改成memcahe
   public function getRoomIdByUid($uid){
-    
+
   }
 }

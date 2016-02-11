@@ -22,10 +22,12 @@ for ($i = 0;$i < $rowNum;$i++) {
   $offset += 4;
 ?>
 <div class="row">
-  <?php foreach ($rooms as $key => $room) {?>
+  <?php foreach ($rooms as $key => $room) {
+    $room['user_list'] = json_decode($room['user_list'],true);
+    ?>
     <div class="col-md-3">
       <div class="card card-block">
-       <h3 class="card-title"><span class="room_name"><?=$room['name']?></span> (<?=$room['user_count']?>)</h3>
+       <h3 class="card-title"><span class="room_name"><?=$room['name']?></span> (<?=count($room['user_list'])?>)</h3>
        <p class="card-text"><?php if(!$room['password']):?>不<?php endif;?>需要密码</p>
        <a ref="javascript:void(0)" class="btn btn-primary" data-id="<?=$room['id']?>" data-pwd="<?=($room['password']?1:0)?>">加入</a>
      </div>

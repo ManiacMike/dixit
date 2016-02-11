@@ -21,21 +21,22 @@
   <p> 用户列表： </p>
   <div id="user_list">
     <div class="row">
-      <?php foreach ($this->room['user_list'] as $uid => $info):?>
       <div class="col-md-2">
-        <?=$uid?>
       </div>
-      <?php endforeach;?>
+      <div class="col-md-2">
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+var uid = "<?=$this->uid?>"
 var ws = new WebSocket('ws://<?=$this->wsHost?>/?uid='+uid+'&room_id=<?=$this->room['id']?>');
 var status = false;
+var connected_ulist;
 ws.onopen = function() {
   status = true
-  ws.send('{"event":"connect","room_id":"<?=$this->room['id']?>"}');
+  //ws.send('{"event":"connect","room_id":"<?=$this->room['id']?>"}');
 };
 ws.onclose = function() {
   status = true
@@ -44,6 +45,22 @@ ws.onerror = function(e) {
   status = false
 }
 ws.onmessage = function(event) {
+  var msg = JSON.parse(event.data);
+  if(msg.type == "user_connect"){
+    updateUserList(msg.user_list)
+  }else if(msg.type == "user_disconnect"){
+    updateUserList(msg.user_list)
+  }
 };
+function updateUserList(ulist){
+  ulist = ulist.split(",")
+  connected_ulist = ulist
+  var htmlStr = "<div class=\"row\">"
+  for (var i = 0; i < ulist.length; i++) {
+    htmlStr+="<div class=\"col-md-2\">"+ulist[i]+"</div>"
+  }
+  htmlStr+="</div>"
+  $("#user_list").html(htmlStr)
+}
 </script>
 <?php include 'footer.phtml';?>
