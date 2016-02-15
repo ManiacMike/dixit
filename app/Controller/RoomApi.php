@@ -13,7 +13,7 @@ class Controller_RoomApi extends Controller_BaseApi {
 	}
 
 	public function listAction(){
-		
+
   }
 
   public function createAction(){
@@ -39,7 +39,7 @@ class Controller_RoomApi extends Controller_BaseApi {
 		}
 		$userlist = json_decode($room['user_list'],true);
 		$userlist = $userlist?$userlist:array();
-		if(isset($userlist[$this->uid])){
+		if(in_array($uid, $userlist)){
 			$this->echoJson(true,$rid);
 		}else{
 			$res = $roomModel->addUser($rid,$userlist,$this->uid);
