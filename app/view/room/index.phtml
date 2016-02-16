@@ -18,12 +18,24 @@
     </div>
   </div>
 
-  <p> 用户列表： </p>
   <div id="user_list">
+  </div>
+  <div id="score_board_ui" style="display:none">
+    <div class="row">
+      <h3 class="col-md-3">第<span id="round">1</span>轮</h3>
+      <div class="col-md-3">当前出牌人：<span id="host_name"></span></div>
+    </div>
+    <div class="row" id="score_board_content"></div>
+  </div>
+  <div id="keyword_show_ui" class="row" style="display:none">
+    <div class="col-md-3"><h2></h2></div>
+    <div class="col-md-2"><p>请根据出牌人的关键词，选出你手牌中相近的牌</p></div>
   </div>
   <?php if($this->room['creator'] == $this->uid):?>
   <div id="start_ui"><a id="start_btn" class="btn btn-danger">开始游戏</a></div>
   <?php endif;?>
+  <div id="table_cards" class="row">
+  </div>
   <div id="my_cards" class="row">
     <div></div>
   </div>
@@ -33,8 +45,8 @@
   </div>
 </div>
 <script>
-var uid = "<?=$this->uid?>"
-var selected_my_card = 0;
+var uid = "<?=$this->uid?>",host,connected_ulist,my_cards
+var selected_answer_card = 0,selected_my_card,selected_guess_card = 0;
 var ws = new WebSocket('ws://<?=$this->wsHost?>/?uid='+uid+'&room_id=<?=$this->room['id']?>');
 </script>
 <?php include 'footer.phtml';?>
