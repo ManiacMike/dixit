@@ -33,7 +33,7 @@ $(function(){
       $("#start_ui").hide();
       $("#user_list").hide();
       $("#host_name").html(msg.host)
-      $("#score_borad_ui").show()
+      $("#score_board_ui").show()
       updateScoreBoard()
       var html = getCardsHtml(msg.cards)
       $("#my_cards").html(html)
@@ -45,7 +45,7 @@ $(function(){
       $("#keyword_show_ui").fadeIn();
       $("#keyword_show_ui").find("h2").html(msg.keyword)
       if(host != uid){
-        $("#my_cards").on("click","div",function(){
+        $("#my_cards").children().click(function(){
           var id = $(this).children("img").attr("data-id")
           selected_my_card = id
           var c = confirm("确定选择这张牌吗")
@@ -58,7 +58,7 @@ $(function(){
           }
         });
       }
-    }else if(msg.type == "guestpick"){
+    }else if(msg.type == "showcards"){
       var html = getCardsHtml(msg.cards)
       $("#table_cards").html(html)
       if(host != uid){
@@ -83,6 +83,8 @@ $(function(){
         my_cards.push(msg.fillcard)
         var html = getCardsHtml(my_cards)
         $("#my_cards").html(html)
+        $("#table_cards").html("");
+        $("#keyword_show_ui").hide();
         host = msg.host
         if(msg.host == uid){
           showHostOption()
@@ -124,17 +126,19 @@ $(function(){
   function getCardsHtml(cards){
     var html = "";
     for(var i=0;i<cards.length;i++){
-      html += "<div class=\"col-md-2\"><img data-id=\""+msg.cards[i]+"\" src=\"/images/"+msg.cards[i]+".jpg\"/></div>";
+      html += "<div class=\"col-md-2\"><img data-id=\""+cards[i]+"\" src=\"/images/"+cards[i]+".jpg\"/></div>";
     }
     return html
   }
 
   function removeCard(card){
+    var newArray = new Array()
     for (var i = 0; i < my_cards.length; i++) {
-      if(my_cards[i] == card){
-
+      if(my_cards[i] != card){
+        newArray.push(my_cards[i])
       }
     }
+    my_cards = newArray
   }
 
   function showHostOption(){
@@ -150,10 +154,11 @@ $(function(){
           removeCard(selected_answer_card)
           var html = getCardsHtml(my_cards)
           $("#my_cards").html(html)
+          $("#keyword_input").val("")
         }
       }
     });
-    $("#my_cards").on("click","div",function(){
+    $("#my_cards").children().click(function(){
       var id = $(this).children("img").attr("data-id")
       selected_answer_card = id
       console.log(selected_answer_card);
